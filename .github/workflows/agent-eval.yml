@@ -52,7 +52,10 @@ jobs:
 
       # ---- Stage 1: Prep eval ----
       - name: Prep eval
-        run: python prep_eval.py --dataset eval/data/test_cases.jsonl
+        run: |
+          python prep_eval.py \
+            --dataset eval/data/test_cases.jsonl \
+            --agent-version "${{ steps.version.outputs.version }}"
 
       # ---- Stage 2: Version eval ----
       - name: Version eval
@@ -69,6 +72,17 @@ jobs:
           name: scorecard-${{ steps.version.outputs.version }}
           path: eval/results/${{ steps.version.outputs.version }}.json
 
+      # ---- First-run bootstrap: create a baseline if none exists yet ----
+      # Without this, regression_eval.py fails on the very first run since
+      # eval/results/baseline.json won't exist until someone commits one.
+      - name: Bootstrap baseline if missing
+        run: |
+          if [ ! -f eval/results/baseline.json ]; then
+            echo "No baseline.json found - using this run's scorecard as the initial baseline."
+            mkdir -p eval/results
+            cp eval/results/${{ steps.version.outputs.version }}.json eval/results/baseline.json
+          fi
+
       # ---- Stage 3: Regression eval (compares against baseline on main) ----
       - name: Regression eval
         run: |
@@ -84,6 +98,6 @@ jobs:
         run: |
           git config user.name "eval-bot"
           git config user.email "eval-bot@users.noreply.github.com"
-          git add eval/results/${{ steps.version.outputs.version }}.json
+          git add eval/results/${{ steps.version.outputs.version }}.json eval/results/baseline.json
           git commit -m "eval: add scorecard for agent-v${{ steps.version.outputs.version }}" || echo "nothing to commit"
           git push
