@@ -1,0 +1,40 @@
+{
+  "agent_version": "sha-97048f26",
+  "run_id": "84fec3a8-8e6c-4265-bc1e-e65b49585578",
+  "timestamp": 1789312997.8301945,
+  "total_cases": 3,
+  "passed": 3,
+  "failed": 0,
+  "errors": 0,
+  "pass_rate": 1.0,
+  "avg_latency_ms": 0.0921586666654169,
+  "results": [
+    {
+      "case_id": "case-001",
+      "input": "What is 2 + 2?",
+      "expected": "4",
+      "actual": "4",
+      "passed": true,
+      "latency_ms": 0.18624999999872216,
+      "error": null
+    },
+    {
+      "case_id": "case-002",
+      "input": "What is the capital of France?",
+      "expected": "Paris",
+      "actual": "Paris",
+      "passed": true,
+      "latency_ms": 0.0052379999999629945,
+      "error": null
+    },
+    {
+      "case_id": "case-003",
+      "input": "Reverse the string 'hello'",
+      "expected": "olleh",
+      "actual": "olleh",
+      "passed": true,
+      "latency_ms": 0.08498799999756557,
+      "error": null
+    }
+  ]
+}
