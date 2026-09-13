@@ -1,6 +1,0 @@
-# Base dependencies for the eval scripts.
-# Add whatever your actual agent client / grading logic needs, e.g.:
-#   anthropic
-#   openai
-#   requests
-#   pyyaml
