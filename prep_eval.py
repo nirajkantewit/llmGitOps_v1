@@ -69,29 +69,24 @@ def check_dataset(path: str) -> list[dict]:
 
 def check_agent(agent_version: str, smoke_test: bool):
     """
-    Replace this with real checks for your setup, e.g.:
-      - the model checkpoint / prompt config for agent_version exists
-      - required env vars / API keys are set
-      - the endpoint responds to a health check
+    Checks that the agent is ready to be evaluated. Currently checks that
+    agent.py (the simple rule-based agent) can be imported and called.
+    When you swap in a real agent, replace this with real checks for your
+    setup, e.g.: required env vars / API keys, a model registry lookup, or
+    an endpoint health check.
     """
-    import os
-
-    # Example: require an API key env var to be present
-    required_env_vars = ["AGENT_API_KEY"]  # adjust to your actual requirements
-    missing = [v for v in required_env_vars if not os.environ.get(v)]
-    if missing:
-        print(f"FAIL: missing required environment variable(s): {', '.join(missing)}")
+    try:
+        import agent as agent_module
+    except ImportError as e:
+        print(f"FAIL: could not import agent.py: {e}")
         sys.exit(1)
 
-    # PLACEHOLDER: verify the specific version can actually be loaded/resolved.
-    # e.g. check a model registry, a git tag, or an endpoint's /health route.
-    print(f"OK: environment configured for agent version '{agent_version}'")
+    print(f"OK: agent module importable for version '{agent_version}'")
 
     if smoke_test:
         try:
-            # PLACEHOLDER: minimal real call to confirm the agent responds at all.
-            # actual = load_agent(agent_version)("ping")
-            print("OK: smoke test call succeeded")
+            result = agent_module.run("What is 2 + 2?", version=agent_version)
+            print(f"OK: smoke test call succeeded (returned {result!r})")
         except Exception as e:
             print(f"FAIL: smoke test call failed: {e}")
             sys.exit(1)

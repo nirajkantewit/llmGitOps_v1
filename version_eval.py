@@ -83,15 +83,15 @@ def load_dataset(path: str) -> list[TestCase]:
 def load_agent(agent_version: str) -> Callable[[str], Any]:
     """
     Return a callable that runs the agent for a given version.
-    Replace this with your actual agent-loading logic:
-      - load a specific model checkpoint
-      - check out a specific prompt/config version
-      - point at a versioned API endpoint, etc.
+    Currently wired to the simple rule-based agent in agent.py so the
+    pipeline runs end-to-end. Swap this out for real agent-loading logic
+    (a specific model checkpoint, a versioned API endpoint, etc.) whenever
+    you're ready to evaluate a real agent instead.
     """
+    import agent as agent_module
+
     def run_agent(input_text: str) -> Any:
-        # PLACEHOLDER: replace with real agent call, e.g.:
-        # return my_agent_client.run(input_text, version=agent_version)
-        raise NotImplementedError("Wire this up to your actual agent runner")
+        return agent_module.run(input_text, version=agent_version)
 
     return run_agent
 
